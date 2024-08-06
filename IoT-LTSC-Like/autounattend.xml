@@ -4,7 +4,10 @@
   <!--Compiled by Memory's Tech Tips https://www.youtube.com/@memstechtips | https://memstechtips.blogspot.com/ -->
   <!--Credit to Schneegans.de as the Base File was Generated with https://schneegans.de/windows/unattend-generator/ -->
   <!--Credit to Chris Titus Tech as this file contains Tweaks from The Windows Utility https://github.com/ChrisTitusTech/winutil | https://christitus.com/windows-tool/ | https://www.youtube.com/@ChrisTitusTech/ -->
-  <settings pass="offlineServicing"></settings>
+    <settings pass="offlineServicing">
+  <!-- To Add Your PC Drivers Just Create a Folder name "$WinpeDriver$" in your Pendrive / Installation Media. Then install Windows using this Answer File. -->
+  <!-- To Export Drivers from Existing Windows run following command in Command Prompt "dism /online /export-driver /destination:D:\$WinpeDriver$" -->
+  </settings
   <settings pass="windowsPE">
     <component name="Microsoft-Windows-Setup" processorArchitecture="x86" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS">
       <UserData>
@@ -834,6 +837,9 @@ Where-Object -FilterScript {
 :: Bypasses Microsoft Account Creation
 reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE" /v BypassNRO /t REG_DWORD /d 1 /f
 
+;; Remove Settings Home Page from All Users
+reg.exe add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v SettingsPageVisibility /t REG_SZ /d "hide:home" /f
+
 :: Disables User Account Control Temporarily - Without this entry, some commands in the currentuser.cmd script will fail. UAC is re-enabled in the currentuser.cmd script again.
 reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v EnableLUA /t REG_DWORD /d 0 /f
 
@@ -1262,6 +1268,9 @@ reg.exe add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Explore
 :: Don't Update Last Access Time Stamp - This Can Improve File System Performance
 fsutil.exe behavior set disableLastAccess 1
 
+;; Disables the creation of legacy 8.3 character-length file names on FAT- and NTFS-formatted volumes.
+fsutil.exe behavior set disable8dot3 1
+	    
 :: Restore Windows Photo Viewer and Set as Default Program for Image Files
 :: Restore Windows Photo Viewer
 reg.exe add "HKEY_CURRENT_USER\SOFTWARE\Classes\.bmp" /ve /d "PhotoViewer.FileAssoc.Tiff" /f
